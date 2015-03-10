@@ -1,0 +1,68 @@
+# 2013-04-07
+add functions:
+    lcy.in
+    lcy.table.read
+    lcy.table.write
+    lcy.heatmap.plot
+        # 2013-04-11 Modified
+        # add tryCatch to handle the case that opened connection can not be closed.
+    lcy.id.name.map
+        # 2013-06-1 Modified
+        # add one parameter rm.dup=FALSE to show whether rm duplication is the source
+
+# 2013-04-11
+add function:
+    lcy.affy.rm
+    lcy.DEG.summary
+
+# 2013-04-16
+added function:
+    lcy.svm
+    lcy.ROCcurve
+
+# 2013-04-16
+added function:
+    lcy.feature.selector
+
+# 2013-04-18
+added function:
+    lcy.freq.summ
+    lcy.ihc.grouping
+
+# 2013-05-10
+added function:
+    lcy.graph.union
+        # 2013-0602 Modified
+        # fixing bug. there could be nodes which have the same gene name but different id. 
+    lcy.graph.disjoint
+    lcy.graph.difference
+    lcy.graph.intersection
+    lcy.graphml.read
+    lcy.graph.read
+    lcy.graph.plot
+    tmp.labeled.edgelist
+
+# 2013-05-17
+    lcy.gSpan.input.gen
+    lcy.gSpan.subgraph.gen
+    lcy.is.subgraph.in
+
+# 2013-05-22
+added function:
+    lcy.graph.list.union
+    lcy.initiation
+    lcy.venn.diagram
+# 2013-05-27
+added function:
+    lcy.gene.exprs.status
+    lcy.diff.comparison
+    lcy.comparison.plot
+# 2013-05-30
+added function:
+    lcy.set.operation
+# 2013-06-10
+added function:
+    lcy.gSpan.subgraph.subgraph.gene.v2
+# 2014-09-30
+update lcy.graph.score
+added lcy.gene.annotator
