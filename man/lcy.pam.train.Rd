@@ -7,7 +7,7 @@
     build a classifier using pam method. it is used to train a pam classifier which is further used by lcy.pam.predict function. It supports multi-classes.
 }
 \usage{
-lcy.pam.train(data, label, nfold = 10, nboot = 100, err.cutoff = 0.02, n.threshold = 30, err.pdf = TRUE)
+lcy.pam.train(data, label, nfold = 10, nboot = 100, err.cutoff = 0.02, n.threshold = 30, err.pdf = TRUE, thresh)
 }
 \arguments{
   \item{data}{
@@ -30,6 +30,9 @@ lcy.pam.train(data, label, nfold = 10, nboot = 100, err.cutoff = 0.02, n.thresho
 }
   \item{err.pdf}{
     logic value indicating whether boxplot of error rate are plotted or not.
+}
+  \item{thresh}{
+    if thresh is not missing, use this specific threshold index to select signature. Otherwise, automatically select one.
 }
 }
 \details{
