@@ -89,7 +89,7 @@ lcy.pam.predict <- function (data, fit, postRth = 1){
 }
 
 
-lcy.pam.train <- function(data, label, nfold = 10, nboot = 100, err.cutoff=0.02, n.threshold = 30, err.pdf=TRUE){
+lcy.pam.train <- function(data, label, nfold = 10, nboot = 100, err.cutoff=0.02, n.threshold = 30, err.pdf=TRUE, thresh, seed=123456){
     # n.threshold = 30 for pamr.train : Number of threshold values desired (default 30)
     # if there is any threshold which smaller than err.cutoff, then all genes are considered as signature.
     getCentroids <- function (fit, data, threshold) {
@@ -116,6 +116,7 @@ lcy.pam.train <- function(data, label, nfold = 10, nboot = 100, err.cutoff=0.02,
         return(d)
     }
     require(pamr)
+    set.seed(seed)
     dat <- list()
     if(is.null(names(label))){
         names <- 1: length(label)
@@ -138,18 +139,24 @@ lcy.pam.train <- function(data, label, nfold = 10, nboot = 100, err.cutoff=0.02,
     ngenes          <- c(sapply(1:(length(pam.rslt$threshold) - 1), function(x) nrow(pamr.listgenes(pam.rslt, dat, pam.rslt$threshold[x]))), 0)
     colnames(err)   <- ngenes
     # choose threshold cutoff. select the first index where error rate is smaller than err.cutoff.
-    index           <- which(colMeans(err) <= err.cutoff)
-    if(length(index)<=0){
-        index=nrow(dat$x)
-    }
-    thresh          <- pam.rslt$threshold[index[length(index)]]
-    signature       <- (pamr.listgenes(pam.rslt, dat, thresh))[, "id"]
-    cents           <- getCentroids(pam.rslt, dat, thresh)
-    cents           <- cents[signature, ]
     if(err.pdf){
         pdf("Pamr_error_rate.pdf")
         boxplot(err, xlab = "No. of genes", ylab = "error rate")
         dev.off()
     }
+    index           <- which(colMeans(err) <= err.cutoff)
+    if(length(index)<=0){
+        index <- 1
+    }else{
+        index <- index[length(index)]
+    }
+    if(missing(thresh)){
+        thresh      <- pam.rslt$threshold[index]
+    }else{
+        thresh      <- pam.rslt$thresh]
+    }
+    signature       <- (pamr.listgenes(pam.rslt, dat, thresh))[, "id"]
+    cents           <- getCentroids(pam.rslt, dat, thresh)
+    cents           <- cents[signature, ]
     return(list(signature = signature, pam.rslt = pam.rslt, thresh = thresh, err = err, cents = cents))
 }
