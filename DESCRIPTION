@@ -1,8 +1,8 @@
 Package: lcyCF
 Type: Package
 Title: commonly used functions for my own convinience.
-Version: 0.1
-Date: 2014-02-11
+Version: 0.2
+Date: 2015-03-16
 Author: Chengyu Liu
 Maintainer: Chengyu Liu <chengyu.liu.cs@gmail.com>
 Imports: affy, caret, igraph, RColorBrewer, sqldf
@@ -11,4 +11,4 @@ Depends: igraph, gplots
 Description: lcy.in,lcy.table.read, lcy.table.write, lcy.heatmap.plot, lcy.id.name.map.
 License: GPL-2
 LazyLoad: yes
-Packaged: 2014-05-23 10:34:20 UTC; czliu
+Packaged: 2015-03-16 10:34:20 UTC; czliu

@@ -34,6 +34,5 @@ AUC is used to estimate the predictive performance of each gene.
 \author{
     Chengyu Liu <chengyu.liu.cs@gmail.com>
 }
-}
 \keyword{ filter }
 \keyword{ classifier }

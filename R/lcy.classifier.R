@@ -153,7 +153,7 @@ lcy.pam.train <- function(data, label, nfold = 10, nboot = 100, err.cutoff=0.02,
     if(missing(thresh)){
         thresh      <- pam.rslt$threshold[index]
     }else{
-        thresh      <- pam.rslt$thresh]
+        thresh      <- pam.rslt$thresh[thresh]
     }
     signature       <- (pamr.listgenes(pam.rslt, dat, thresh))[, "id"]
     cents           <- getCentroids(pam.rslt, dat, thresh)

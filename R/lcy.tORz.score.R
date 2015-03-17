@@ -5,7 +5,7 @@ lcy.tORz.score <- function(data, group=list(ctrl,treat), type='zscore', method='
         if(!byrow){
             if(method == 'median'){
                 y       <- apply(data,2,function(x){ x - median(x,na.rm=T) })
-                score   <- scale(y,center=FALSE)
+                score   <- scale(y,center=FALSE,scale=scale)
             }else{
                 score   <- scale(data,scale=scale)
             }
@@ -26,14 +26,14 @@ lcy.tORz.score <- function(data, group=list(ctrl,treat), type='zscore', method='
             if(!byrow){
                 if(method == 'median'){
                     y       <- apply(data,2,function(x){ x - median(x,na.rm=T) })
-                    score   <- scale(y,center=FALSE)
+                    score   <- scale(y,center=FALSE,scale=scale)
                 }else{
                     score   <- scale(data,scale=scale)
                 }
             }else{
                 if(method == 'median'){
                     y       <- apply(data,1,function(x){ x - median(x,na.rm=T) })
-                    score   <- t(scale(y,center=FALSE))
+                    score   <- t(scale(y,center=FALSE),scale=scale)
                 }else{
                     data    <- t(data)
                     score   <- scale(data,scale=scale)
@@ -53,11 +53,21 @@ lcy.tORz.score <- function(data, group=list(ctrl,treat), type='zscore', method='
             len.ctrl    <- length(group$ctrl)
             len.treat   <- length(group$treat)
             data        <- as.matrix(data[,c(group$treat, group$ctrl)])
-            mean.ctrl   <- apply(data[,group$ctrl],1, as.name(as.character(method)),na.rm=TRUE)
-            sd.ctrl     <- apply(data[,group$ctrl],1, sd,na.rm=TRUE)
-            score       <- apply(data[,group$treat], 2, function(x) {
+            if(byrow){
+                DIM1 <- 1
+                DIM2 <- 2
+            }else{
+                DIM1 <- 2
+                DIM2 <- 1
+            }
+            mean.ctrl   <- apply(data[,group$ctrl], DIM, as.name(as.character(method)),na.rm=TRUE)
+            sd.ctrl     <- apply(data[,group$ctrl], DIM, sd,na.rm=TRUE)
+            score       <- apply(data[,c(group$treat, group$ctrl)], DIM2 , function(x) {
                                     (x-mean.ctrl)/sd.ctrl
-            })
+                                })
+            if(!byrow){
+                score   <- t(score)
+            }
             if(type!='zscore'){
                 score   <- score * sqrt(len.ctrl)
             }
