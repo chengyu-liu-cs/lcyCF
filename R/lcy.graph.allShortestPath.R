@@ -1,4 +1,4 @@
-lcy.graph.allShortestPath <- function(g){
+lcy.graph.allShortestPath <- function(g, dup=TRUE){
     # start with ranked nodes based on out-degree (degree > 0).
     # graph should have name attribute for vertices which are ids and used to map expression.
 
@@ -17,6 +17,9 @@ lcy.graph.allShortestPath <- function(g){
                                 len <- length(z)
                                 if(len>2){
                                     z   <- c(z[1], rep(z[2:(len-1)], rep(2,len-2)), z[len])
+                                }
+                                if(!dup){
+                                    z   <- unique(z)
                                 }
                                 path[[cnt]] <<- z
                                 cnt <<- cnt + 1;

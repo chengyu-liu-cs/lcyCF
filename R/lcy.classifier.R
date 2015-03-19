@@ -129,7 +129,7 @@ lcy.pam.train <- function(data, label, nfold = 10, nboot = 100, err.cutoff=0.02,
     dat$y <- factor(dat$y)
     dat$geneid      <- rownames(dat$x)
     dat$genenames   <- rownames(dat$x)
-    pam.rslt        <- pamr.train(data = dat)
+    pam.rslt        <- pamr.train(data = dat,n.threshold=n.threshold)
     pam.cv.rslt.l   <- list()
     for (i in 1:nboot) {
         pam.cv.rslt         <- pamr.cv(fit = pam.rslt, data = dat, nfold = nfold)
@@ -150,13 +150,16 @@ lcy.pam.train <- function(data, label, nfold = 10, nboot = 100, err.cutoff=0.02,
     }else{
         index <- index[length(index)]
     }
+    print(pam.rslt$threshold)
     if(missing(thresh)){
         thresh      <- pam.rslt$threshold[index]
     }else{
-        thresh      <- pam.rslt$thresh[thresh]
+        thresh      <- pam.rslt$threshold[n.threshold - thresh + 1]
     }
     signature       <- (pamr.listgenes(pam.rslt, dat, thresh))[, "id"]
+    print(length(signature))
     cents           <- getCentroids(pam.rslt, dat, thresh)
     cents           <- cents[signature, ]
+    print("pam is done")
     return(list(signature = signature, pam.rslt = pam.rslt, thresh = thresh, err = err, cents = cents))
 }

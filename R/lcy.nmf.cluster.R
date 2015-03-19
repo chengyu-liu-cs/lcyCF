@@ -99,6 +99,7 @@ lcy.nmf.cluster <- function(d, clinic, rank=3, method='brunet', marker.call='kim
                                             })))
     if(length(genes) <= 1){
         print('there are not any significant genes')
+        dev.off()
         return(NULL)
     }
     # evaluate the predictive power of each gene
@@ -113,18 +114,19 @@ lcy.nmf.cluster <- function(d, clinic, rank=3, method='brunet', marker.call='kim
         }
         label.pred2     <- lcy.pam.predict(d, rst)
         annC$pred2      <- as.character(label.pred2$class)
-        annColors       <- lapply(1:length(annC), function(x) { sample(colors, length(table(annC[[x]]))) })
         marker          <- rst$signature
     }else if(marker.call == 'simple'){
         # do nothing
     }else{
         marker          <- extractFeatures(res,method=marker.call)
         marker          <- unlist(marker)
-        marker      <- rownames(d)[marker]
+        marker          <- marker[!is.na(marker)]
+        marker          <- rownames(d)[marker]
+        print(marker)
     }
-    if(length(rst$signature)> 1){
-        aheatmap(d[rst$signature,],col='RdYlBu',scale='row',annCol=annC,distfun=function(x) as.dist((1-cor(t(x))/2)), Rowv = "correlation", Colv="man",
-                                    hclustfun=function(y) hclust(y,method='ward.D'),main=marker.call, fontsize=7, annColors=annColors)
+    if(length(marker)> 1){
+        aheatmap(d[marker,],col='RdYlBu',scale='row',annCol=annC,distfun=function(x) as.dist((1-cor(t(x))/2)), Rowv = "correlation", Colv="man",
+                                    hclustfun=function(y) hclust(y,method='ward'),main=marker.call, fontsize=7, annColors=annColors)
     }
     dev.off()
     return(marker)

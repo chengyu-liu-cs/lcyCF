@@ -87,3 +87,38 @@ function(data,output='heatmap.pdf',col='greenred',group=NULL,symbreaks=TRUE,dens
     dev.off()
     return(ht.obj)
 }
+
+
+lcy.aheatmap <- function(data, clinic, col='RdYlBu', scale='row', annCol, distfun=function(x) as.dist((1-cor(t(x))/2)), Rowv = "correlation", Colv="man", hclustfun='ward', main="heatmap", fontsize=7){
+    if(missing(annCol)){
+        annCol <- NULL
+    }
+    if(!missing(clinic)){
+        samples         <- intersect(colnames(data), rownames(clinic))
+        label           <- rep(NA, ncol(data))
+        names(label)    <- colnames(data)
+        tmp             <- apply(clinic, 2, function(x) {
+                                label.loc   <- label
+                                label.loc[samples] <- x[samples]
+                                return(label.loc)
+                            })
+        annCol          <- lapply(1:ncol(tmp), function(x) {tmp[,x]})
+        names(annCol)   <- colnames(clinic)
+    }
+    colors              <- rainbow(9)
+    if(length(annCol)>=0){
+        annColors       <- lapply(1:length(annCol), function(x) {
+                                if(length(unique(annCol[[x]])) <= length(colors)){
+                                    colors[1:length(table(annCol[[x]]))]
+                                }else{
+                                    #c('red','blue')
+                                    NULL
+                                }
+                            })
+    }
+    if(ncol(data)> 1){
+        h <- aheatmap(data, col='RdYlBu',scale='row',annCol=annCol, distfun=distfun, Rowv=Rowv, Colv=Colv, 
+                        hclustfun=function(y) hclust(y,method='ward'), main=main, fontsize=fontsize, annColors=annColors)
+    }
+    return(h)
+}
