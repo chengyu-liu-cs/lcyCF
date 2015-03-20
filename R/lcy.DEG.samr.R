@@ -1,4 +1,4 @@
-lcy.DEG.samr <- function(x, y, resp.type='Two class unpaired', min.foldchange=2, delta=0.3, nperms=100, nvals=100, logged2=TRUE, censoring.status=NULL, eigengene.number=1, assay.type="array", qvalue=20, outpath='./',genenames=NULL,...){
+lcy.DEG.samr <- function(x, y, resp.type='Two class unpaired', min.foldchange=2, delta=0.3, nperms=100, nvals=100, logged2=TRUE, censoring.status=NULL, eigengene.number=1, assay.type="array", qvalue=20, pvalue=0.05, outpath='./',genenames=NULL,...){
     require(samr)    
     data            <- list(x=x, y=y, logged2=logged2,
                                 censoring.status = censoring.status,
@@ -19,6 +19,7 @@ lcy.DEG.samr <- function(x, y, resp.type='Two class unpaired', min.foldchange=2,
     pv              <- samr.pvalues.from.perms(samr.obj$tt, samr.obj$ttstar)
     c               <- cbind(c,pvalue=pv[rownames(c)])
     lo              <- c[as.numeric(c[,6]) < qvalue,]
+    lo              <- c[as.numeric(c[,7]) < pvalue,]
     if (substr(outpath, start = nchar(outpath), stop = nchar(outpath)) != "/") {
         outpath <- paste(outpath, "/", sep = "")
     }

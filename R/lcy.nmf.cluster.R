@@ -43,7 +43,7 @@ lcy.nmf.survey <- function(d, num.genes=seq(1,10,2)*1000,method='brunet', rank=2
     setwd(old.path)
     return(results)
 }
-lcy.nmf.cluster <- function(d, clinic, rank=3, method='brunet', marker.call='kim', marker.unique=FALSE, log2=FALSE, qvalue=5, aucth=0.7, err.cutoff=0.2, thresh,silhouette=FALSE, seed=123456){
+lcy.nmf.cluster <- function(d, clinic, rank=3, method='brunet', marker.call='kim', marker.unique=FALSE, log2=FALSE, qvalue=5, aucth=0.7, err.cutoff=0.2, thresh,silhouette=FALSE, seed=123456,min.foldchange=0){
     # DeSousa2013 bioconductor
     # signature identification
     require(NMF)
@@ -91,12 +91,15 @@ lcy.nmf.cluster <- function(d, clinic, rank=3, method='brunet', marker.call='kim
                             })
     # significant genes for each subtype
     genes               <- unique(unlist(lapply(unique(label.pred), function(z) {
+                                                print(lcy.DEG.samr)
                                                 temp                    <- label.pred
                                                 temp[label.pred == z]   <- 1
                                                 temp[label.pred != z]   <- 2
-                                                genes                   <- lcy.DEG.samr(x=d, y=temp, resp.type='Two class unpaired',qvalue=qvalue,delta=0.3)
+                                                genes                   <- lcy.DEG.samr(x=d, y=temp, resp.type='Two class unpaired',qvalue=qvalue,delta=0.3,min.foldchange=min.foldchange)
                                                 return(rownames(genes))
                                             })))
+    #genes2              <- rownames(lcy.DEG.samr(x=d, y=label.pred, resp.type='Multiclass',qvalue=qvalue,delta=0.3))
+    #genes               <- union(genes1,genes2)
     if(length(genes) <= 1){
         print('there are not any significant genes')
         dev.off()
@@ -125,10 +128,13 @@ lcy.nmf.cluster <- function(d, clinic, rank=3, method='brunet', marker.call='kim
         print(marker)
     }
     if(length(marker)> 1){
+        print('here')
+        print(length(marker))
+        heatmap.2(d[marker,],col='greenred',trace='none', scale='row')
+        print('here')
         aheatmap(d[marker,],col='RdYlBu',scale='row',annCol=annC,distfun=function(x) as.dist((1-cor(t(x))/2)), Rowv = "correlation", Colv="man",
-                                    hclustfun=function(y) hclust(y,method='ward'),main=marker.call, fontsize=7, annColors=annColors)
+                                    hclustfun=function(y) hclust(y,method='ward'),main=marker.call, fontsize=3, annColors=annColors)
     }
     dev.off()
     return(marker)
 }
-

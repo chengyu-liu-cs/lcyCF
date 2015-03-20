@@ -7,7 +7,7 @@ Author: Chengyu Liu
 Maintainer: Chengyu Liu <chengyu.liu.cs@gmail.com>
 Imports: affy, caret, igraph, RColorBrewer, sqldf
 #Imports: gplots, affy, ROCR, kernlab, caret, FSelector, SPIA, igraph, Vennerable, RColorBrewer, org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg19.knownGene, sqldf
-Depends: igraph, gplots
+Depends: igraph, gplots,NMF
 Description: lcy.in,lcy.table.read, lcy.table.write, lcy.heatmap.plot, lcy.id.name.map.
 License: GPL-2
 LazyLoad: yes

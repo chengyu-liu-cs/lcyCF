@@ -60,14 +60,19 @@ lcy.tORz.score <- function(data, group=list(ctrl,treat), type='zscore', method='
                 DIM1 <- 2
                 DIM2 <- 1
             }
-            mean.ctrl   <- apply(data[,group$ctrl], DIM, as.name(as.character(method)),na.rm=TRUE)
-            sd.ctrl     <- apply(data[,group$ctrl], DIM, sd,na.rm=TRUE)
+            mean.ctrl   <- apply(data[,group$ctrl], DIM1, as.name(as.character(method)),na.rm=TRUE)
+            sd.ctrl     <- apply(data[,group$ctrl], DIM1, sd,na.rm=TRUE)
+            sd.ctrl[sd.ctrl == 0] <- NA
             score       <- apply(data[,c(group$treat, group$ctrl)], DIM2 , function(x) {
-                                    (x-mean.ctrl)/sd.ctrl
+                                    (x-mean.ctrl)
                                 })
+            if(scale){
+                score   <- score / sd.ctrl
+            }
             if(!byrow){
                 score   <- t(score)
             }
+            score <- score[!colSums(apply(score, 1,  is.na)) == ncol(score),]
             if(type!='zscore'){
                 score   <- score * sqrt(len.ctrl)
             }

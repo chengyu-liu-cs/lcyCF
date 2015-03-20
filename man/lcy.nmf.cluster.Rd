@@ -1,13 +1,13 @@
 \name{lcy.NMF.cluster}
 \alias{lcy.NMF.cluster}
 \title{
-    cluster survey
+    cluster samples
 }
 \description{
     Used to identify signature which best separates samples into given clusters. First nmf is used to decide cluster members and then sam, pam are used to identify optimal signature.
 }
 \usage{
-lcy.NMF.cluster(d, clinic, rank = 3, method = "brunet", marker.call = "kim", marker.unique = FALSE, log2 = FALSE, qvalue = 5, aucth = 0.7, err.cutoff = 0.2, thresh, silhouette = FALSE, seed = 123456)
+lcy.NMF.cluster(d, clinic, rank = 3, method = "brunet", marker.call = "kim", marker.unique = FALSE, log2 = FALSE, qvalue = 5, aucth = 0.7, err.cutoff = 0.2, thresh, silhouette = FALSE, seed = 123456,min.foldchange=0)
 }
 \arguments{
   \item{d}{
@@ -48,6 +48,9 @@ lcy.NMF.cluster(d, clinic, rank = 3, method = "brunet", marker.call = "kim", mar
 }
   \item{seed}{
     an integer or one of 'random'(default),'none','ica','nndsvd'
+}
+  \item{min.foldchange}{
+    a numeric value which indicates the fold change difference between two groups. it is used in sam function. Default is 0 which means fold change does count.
 }
 }
 \details{
